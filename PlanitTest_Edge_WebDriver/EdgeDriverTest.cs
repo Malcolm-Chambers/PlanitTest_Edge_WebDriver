@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Edge;
+using OpenQA.Selenium.Firefox;
 
 namespace PlanitTest_Edge_WebDriver
 {
@@ -14,6 +15,7 @@ namespace PlanitTest_Edge_WebDriver
         private EdgeDriver _driver;
 
         [TestInitialize]
+
         public void EdgeDriverInitialize()
         {
             // Initialize edge driver 
@@ -21,21 +23,23 @@ namespace PlanitTest_Edge_WebDriver
             {
                 PageLoadStrategy = PageLoadStrategy.Normal
             };
-            _driver = new EdgeDriver(options);
+//            _driver = new EdgeDriver($"D:/Projects/WebDriver/");
+            _driver = new EdgeDriver($"D:/Projects/Planit/PlanitTest_Edge_WebDriver/WebDriver");
         }
 
         [TestMethod]
-        public void VerifyPageTitle()
+        public void GuardTestAbleToAccessWebSite()
         {
             // Replace with your own test logic
-            _driver.Url = "https://www.bing.com";
-            Assert.AreEqual("Bing", _driver.Title);
+            _driver.Url = "https://jupiter.cloud.planittesting.com/#/home";
+            Assert.AreEqual("Jupiter Toys", _driver.Title);
         }
 
         [TestCleanup]
         public void EdgeDriverCleanup()
         {
-            _driver.Quit();
+            if (_driver != null)
+                _driver.Quit();
         }
     }
 }
