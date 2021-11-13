@@ -31,12 +31,12 @@ namespace PlanitTest_Edge_WebDriver
             _driver.Url = Urls.Contact;
 
             // Act
-            _driver.FindElement(By.ClassName("btn-contact"));
-            _driver.FindElement(By.Id("forename"));
-            _driver.FindElement(By.Id("surname"));
-            _driver.FindElement(By.Id("email"));
-            _driver.FindElement(By.Id("telephone"));
-            _driver.FindElement(By.Id("message"));
+            _driver.FindElement(By.ClassName(LocatorsInContact.SubmitButton));
+            _driver.FindElement(By.Id(LocatorsInContact.forename));
+            _driver.FindElement(By.Id(LocatorsInContact.surname));
+            _driver.FindElement(By.Id(LocatorsInContact.email));
+            _driver.FindElement(By.Id(LocatorsInContact.telephone));
+            _driver.FindElement(By.Id(LocatorsInContact.message));
 
             // Assert
             // No Exceptions IE all fields found.
@@ -47,16 +47,35 @@ namespace PlanitTest_Edge_WebDriver
             // Arrange
             _driver.Url = Urls.Contact;
             // Act
-            var btn = _driver.FindElement(By.ClassName("btn-contact"));
-            btn.Click();
-            var forenameLabel = _driver.FindElement(By.XPath("/html/body/div[2]/div/form/fieldset/div[1]/label"));
-            var forenameHelp = _driver.FindElement(By.XPath("/html/body/div[2]/div/form/fieldset/div[1]/div/span"));
-            var c= forenameHelp.GetCssValue("color");
+            var forenameLabel = _driver.FindElement(By.XPath(LocatorsInContact.forenameLabel));
+            var surnameLabel = _driver.FindElement(By.XPath(LocatorsInContact.surnameLabel));
+            var emailLabel = _driver.FindElement(By.XPath(LocatorsInContact.emailLabel));
+            var telephoneLabel = _driver.FindElement(By.XPath(LocatorsInContact.telephoneLabel));
+            var messageLabel = _driver.FindElement(By.XPath(LocatorsInContact.messageLabel));
             // Assert
             Assert.AreEqual("Forename *", forenameLabel.Text);
-            Assert.AreEqual("Forename is required", forenameHelp.Text);
-            Assert.AreEqual("rgba(185, 74, 72, 1)", forenameHelp.GetCssValue("color"));
+            Assert.AreEqual("Surname *", surnameLabel.Text);
+            Assert.AreEqual("Email *", emailLabel.Text);
+            Assert.AreEqual("Telephone *", telephoneLabel.Text);
+            Assert.AreEqual("Message *", messageLabel.Text);
             // No Exceptions IE all fields found.
+        }
+        [TestMethod]
+        public void GuardContract_ErrorHelps()
+        {
+            // Arrange
+            _driver.Url = Urls.Contact;
+            // Act Trigger errors to cause Error help to bediscoverable
+            var btn = _driver.FindElement(By.ClassName("btn-contact"));
+            btn.Click();
+
+            var forenameHelp = _driver.FindElement(By.XPath(LocatorsInContact.forenameHelp));
+            var emailHelp = _driver.FindElement(By.XPath(LocatorsInContact.emailHelp));
+            var messageHelp = _driver.FindElement(By.XPath(LocatorsInContact.messageHelp));
+            // Assert
+            Assert.AreEqual("Forename is required", forenameHelp.Text);
+            Assert.AreEqual("Email is required", emailHelp.Text);
+            Assert.AreEqual("Message is required", messageHelp.Text);
         }
     }
 }
