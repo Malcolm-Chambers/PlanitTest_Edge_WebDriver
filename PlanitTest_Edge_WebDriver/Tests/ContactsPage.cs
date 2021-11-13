@@ -2,7 +2,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.Support.UI;
 using PlanitTest_Edge_WebDriver.Helpers;
+using System;
 
 namespace PlanitTest_Edge_WebDriver
 {
@@ -62,19 +64,22 @@ namespace PlanitTest_Edge_WebDriver
             IWebElement email = _driver.FindElement(By.Id(LocatorsInContact.email));
             IWebElement message = _driver.FindElement(By.Id(LocatorsInContact.message));
 
+            // act
             forename.SendKeys("Test Name");
             email.SendKeys("Test@Address.com");
             message.SendKeys("Test Message");
-            // Act
-            SubmitButton.Click();
-            //Assert
+
+            // Assert
             IWebElement forenameLabel = _driver.FindElement(By.XPath(LocatorsInContact.forenameLabel));
-            Assert.ThrowsException< OpenQA.Selenium.NoSuchElementException >(() => _driver.FindElement(By.XPath(LocatorsInContact.forenameHelp)));
+            Assert.ThrowsException<OpenQA.Selenium.NoSuchElementException>(() => _driver.FindElement(By.XPath(LocatorsInContact.forenameHelp)));
             Assert.AreEqual(Formats.DefaultFieldColor, forename.GetCssValue("color"));
             Assert.AreEqual(Formats.DefaultLabelColor, forenameLabel.GetCssValue("color"));
 
             IWebElement emailLabel = _driver.FindElement(By.XPath(LocatorsInContact.emailLabel));
-            Assert.ThrowsException<OpenQA.Selenium.NoSuchElementException>(() => _driver.FindElement(By.XPath(LocatorsInContact.emailHelp)));
+            IWebElement nextElementinEmailDiv = _driver.FindElement(By.XPath(LocatorsInContact.emailHelp));
+            // Unlike other manditory fields this field has within its div other help details other than the dynamic error label.
+            // validate that the next label is standard help text not error text.
+            Assert.AreEqual("Your email address will only be used in reply to this message.", nextElementinEmailDiv.Text);
             Assert.AreEqual(Formats.DefaultFieldColor, email.GetCssValue("color"));
             Assert.AreEqual(Formats.DefaultLabelColor, emailLabel.GetCssValue("color"));
 
@@ -83,8 +88,10 @@ namespace PlanitTest_Edge_WebDriver
             Assert.AreEqual(Formats.DefaultFieldColor, message.GetCssValue("color"));
             Assert.AreEqual(Formats.DefaultLabelColor, messageLabel.GetCssValue("color"));
         }
+        #endregion
+        #region Test Case 2
         [TestMethod]
-        public void Contacts_PopulateManatoryFields_CheckPopup()
+        public void Contacts_PopulateManatoryFields_CheckPopup_once()
         {
             // Arrange
             _driver.Url = Urls.Contact;
@@ -98,9 +105,42 @@ namespace PlanitTest_Edge_WebDriver
             message.SendKeys("Test Message");
             // Act
             SubmitButton.Click();
-
-            var simpleAlert = _driver.SwitchTo().Alert();
             //Assert
+            var popup = _driver.FindElement(By.XPath("/html/body/div[3]"));
+            Assert.IsTrue(popup.Displayed);
+            while (popup.Displayed)
+            {
+            }
+            Assert.IsFalse(popup.Displayed);
+            var SubmitMessage = _driver.FindElement(By.XPath("/html/body/div[2]/div/div"));
+            Assert.AreEqual("Thanks Test Name, we appreciate your feedback.", SubmitMessage.Text);
+        }
+        [TestMethod]
+        public void Contacts_PopulateManatoryFields_CheckPopup_FiveTimes()
+        {
+            // Arrange
+            _driver.Url = Urls.Contact;
+            // Act
+            int loopCount = 0;
+            for (int i = 1; i <= 5; i++)
+            {
+                var SubmitButton = _driver.FindElement(By.ClassName("btn-contact"));
+                IWebElement forename = _driver.FindElement(By.Id(LocatorsInContact.forename));
+                IWebElement email = _driver.FindElement(By.Id(LocatorsInContact.email));
+                IWebElement message = _driver.FindElement(By.Id(LocatorsInContact.message));
+
+                forename.SendKeys("Test Name");
+                email.SendKeys("Test@Address.com");
+                message.SendKeys("Test Message");
+                SubmitButton.Click();
+                var popup = _driver.FindElement(By.XPath("/html/body/div[3]"));
+                while (popup.Displayed) { }
+                var backButton = _driver.FindElement(By.XPath("/html/body/div[2]/div/a"));
+                backButton.Click();
+                loopCount++;
+            }
+            //Assert
+            Assert.AreEqual(5, loopCount);
         }
         #endregion
 
@@ -110,5 +150,7 @@ namespace PlanitTest_Edge_WebDriver
         {
             Assert.Inconclusive();
         }
+        #endregion
+
     }
 }
