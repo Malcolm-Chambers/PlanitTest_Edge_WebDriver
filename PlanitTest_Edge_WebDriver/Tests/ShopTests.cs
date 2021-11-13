@@ -4,7 +4,7 @@ using System.Text;
 
 namespace PlanitTest_Edge_WebDriver.Tests
 {
-    internal class ShopTests
+    internal class ShopTests : BaseTest
     {
     }
 }

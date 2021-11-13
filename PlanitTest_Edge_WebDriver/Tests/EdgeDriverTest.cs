@@ -25,6 +25,14 @@ namespace PlanitTest_Edge_WebDriver
         }
 
         [TestMethod]
+        public void GuardTestAbleToAccessWebShop()
+        {
+            // Replace with your own test logic
+            _driver.Url = Urls.Shop;
+            Assert.AreEqual("Jupiter Toys", _driver.Title);
+        }
+
+        [TestMethod]
         public void GuardContract_InteractableFields()
         {
             // Arrange
@@ -54,9 +62,9 @@ namespace PlanitTest_Edge_WebDriver
             var messageLabel = _driver.FindElement(By.XPath(LocatorsInContact.messageLabel));
             // Assert
             Assert.AreEqual("Forename *", forenameLabel.Text);
-            Assert.AreEqual("Surname *", surnameLabel.Text);
+            Assert.AreEqual("Surname", surnameLabel.Text);
             Assert.AreEqual("Email *", emailLabel.Text);
-            Assert.AreEqual("Telephone *", telephoneLabel.Text);
+            Assert.AreEqual("Telephone", telephoneLabel.Text);
             Assert.AreEqual("Message *", messageLabel.Text);
             // No Exceptions IE all fields found.
         }

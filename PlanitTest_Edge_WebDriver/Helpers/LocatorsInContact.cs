@@ -21,5 +21,7 @@
         public static string messageLabel { get; set; } = "/html/body/div[2]/div/form/fieldset/div[5]/label";
         public static string messageHelp { get; set; } = "/html/body/div[2]/div/form/fieldset/div[5]/div/span";
         public static string AlertCompleted { get; set; } = "/html/body/div[2]/div/div";
+        public static string Popup { get; set; } = "/html/body/div[3]";
+        public static string SubmittedMessage { get; set; } = "/html/body/div[2]/div/div";
     }
 }

@@ -5,12 +5,41 @@ using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
 using PlanitTest_Edge_WebDriver.Helpers;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace PlanitTest_Edge_WebDriver
 {
     [TestClass]
     public class ContactsPage : BaseTest
     {
+        // Bug Test
+        
+        [TestMethod]
+        public void Contacts_BorderColor_SetToRandomColor()
+        {
+            // Arrange
+            _driver.Url = Urls.Contact;
+            var SubmitButton = _driver.FindElement(By.ClassName("btn-contact"));
+            // Act
+            List<string> actualBorders = new List<string>();
+            for (int i = 0; i < 20; i++)
+            {
+                SubmitButton.Click();
+                // Assert
+                IWebElement forename = _driver.FindElement(By.Id(LocatorsInContact.forename));
+                // Forename.border appears to be set to some form of random color range
+                // Raise Bug
+                actualBorders.Add(forename.GetCssValue("border-color"));
+            }
+            string s1 = actualBorders[0];
+            foreach (var item in actualBorders)
+            {
+                Debug.WriteLine(item);
+                Assert.AreEqual(s1, item);
+            }
+        }
+
         #region Test Case 1
         [TestMethod]
         public void Contacts_PressSubmit_MissingDefaults()
@@ -26,6 +55,8 @@ namespace PlanitTest_Edge_WebDriver
             IWebElement forenameLabel = _driver.FindElement(By.XPath(LocatorsInContact.forenameLabel));
             IWebElement forenameHelp = _driver.FindElement(By.XPath(LocatorsInContact.forenameHelp));
 
+            // Forename.border appears to be set to some form of random color range
+            // Raise Bug
             Assert.AreEqual(Formats.ErrorBorderRed, forename.GetCssValue("border-color"));
             Assert.AreEqual(Formats.ErrorRed, forename.GetCssValue("color"));
             Assert.AreEqual(Formats.ErrorRed, forenameLabel.GetCssValue("color"));
@@ -106,14 +137,14 @@ namespace PlanitTest_Edge_WebDriver
             // Act
             SubmitButton.Click();
             //Assert
-            var popup = _driver.FindElement(By.XPath("/html/body/div[3]"));
+            var popup = _driver.FindElement(By.XPath(LocatorsInContact.Popup));
             Assert.IsTrue(popup.Displayed);
             while (popup.Displayed)
             {
             }
             Assert.IsFalse(popup.Displayed);
-            var SubmitMessage = _driver.FindElement(By.XPath("/html/body/div[2]/div/div"));
-            Assert.AreEqual("Thanks Test Name, we appreciate your feedback.", SubmitMessage.Text);
+            var submitedmessage = _driver.FindElement(By.XPath(LocatorsInContact.SubmittedMessage));
+            Assert.AreEqual("Thanks Test Name, we appreciate your feedback.", submitedmessage.Text);
         }
         [TestMethod]
         public void Contacts_PopulateManatoryFields_CheckPopup_FiveTimes()
@@ -133,9 +164,9 @@ namespace PlanitTest_Edge_WebDriver
                 email.SendKeys("Test@Address.com");
                 message.SendKeys("Test Message");
                 SubmitButton.Click();
-                var popup = _driver.FindElement(By.XPath("/html/body/div[3]"));
+                var popup = _driver.FindElement(By.XPath(LocatorsInContact.Popup));
                 while (popup.Displayed) { }
-                var backButton = _driver.FindElement(By.XPath("/html/body/div[2]/div/a"));
+                var backButton = _driver.FindElement(By.XPath(LocatorsInContact.BackButton));
                 backButton.Click();
                 loopCount++;
             }
