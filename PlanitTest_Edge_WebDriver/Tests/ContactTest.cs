@@ -4,6 +4,7 @@ using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
 using PlanitTest_Edge_WebDriver.Helpers;
+using PlanitTest_Edge_WebDriver.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,7 +12,7 @@ using System.Diagnostics;
 namespace PlanitTest_Edge_WebDriver
 {
     [TestClass]
-    public class ContactsPage : BaseTest
+    public class ContactsTest : ContactPage
     {
         // Bug Test
         
