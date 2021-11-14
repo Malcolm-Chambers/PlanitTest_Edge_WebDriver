@@ -1,6 +1,8 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Edge;
+using OpenQA.Selenium.Support.UI;
+using System;
 
 namespace PlanitTest_Edge_WebDriver
 {
@@ -9,6 +11,7 @@ namespace PlanitTest_Edge_WebDriver
     {
 
         protected EdgeDriver _driver;
+        protected WebDriverWait wait;
 
         [TestInitialize]
 
@@ -20,6 +23,8 @@ namespace PlanitTest_Edge_WebDriver
                 PageLoadStrategy = PageLoadStrategy.Normal
             };
             _driver = new EdgeDriver($"D:/Projects/Planit/PlanitTest_Edge_WebDriver/WebDriver");
+            wait = new WebDriverWait(_driver, new TimeSpan(0, 0, 30));
+
         }
 
         [TestCleanup]

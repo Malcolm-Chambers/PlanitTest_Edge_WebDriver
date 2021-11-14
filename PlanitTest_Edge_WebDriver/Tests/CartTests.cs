@@ -26,7 +26,6 @@ namespace PlanitTest_Edge_WebDriver
 
             _driver.FindElement(By.XPath(LocatorsInShop.CartButton)).Click();
             IWebElement msg;
-            var wait = new WebDriverWait(_driver, new TimeSpan(0, 0, 30));
             msg = wait.Until(_driver => _driver.FindElement(By.XPath("/html/body/div[2]/div/p")));
 
             Dictionary<string, Tuple<string, IWebElement, string, IWebElement>> productsInCart = CartPage.LoadProductList(_driver);
@@ -59,7 +58,6 @@ namespace PlanitTest_Edge_WebDriver
 
             _driver.FindElement(By.XPath(LocatorsInShop.CartButton)).Click();
             IWebElement msg;
-            var wait = new WebDriverWait(_driver, new TimeSpan(0, 0, 30));
             msg = wait.Until(_driver => _driver.FindElement(By.XPath("/html/body/div[2]/div/p")));
 
             // assert

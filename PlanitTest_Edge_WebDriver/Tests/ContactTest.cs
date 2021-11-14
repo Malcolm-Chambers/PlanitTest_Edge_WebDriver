@@ -126,8 +126,9 @@ namespace PlanitTest_Edge_WebDriver
         public void Contacts_PopulateManatoryFields_CheckPopup_once()
         {
             // Arrange
-            _driver.Url = Urls.Contact;
-            var SubmitButton = _driver.FindElement(By.ClassName("btn-contact"));
+            _driver.Url = Urls.Contact; 
+
+            var SubmitButton = wait.Until(_driver => _driver.FindElement(By.ClassName("btn-contact")));
             IWebElement forename = _driver.FindElement(By.Id(LocatorsInContact.forename));
             IWebElement email = _driver.FindElement(By.Id(LocatorsInContact.email));
             IWebElement message = _driver.FindElement(By.Id(LocatorsInContact.message));
