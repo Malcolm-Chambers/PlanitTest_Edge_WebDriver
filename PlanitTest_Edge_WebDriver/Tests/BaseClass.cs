@@ -12,7 +12,7 @@ namespace PlanitTest_Edge_WebDriver
 
         [TestInitialize]
 
-        public void EdgeDriverInitialize()
+        public virtual void EdgeDriverInitialize()
         {
             // Initialize edge driver 
             var options = new EdgeOptions
